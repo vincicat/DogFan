@@ -9,15 +9,58 @@
 	</style>
 	<style>
 	#front {
+		background: url(img/dogfan-face.png), url(img/dogfan-front.png);
+	}
+	#fan {
+		background: url(img/dogfan-fan.png);
+	}
+	#back {
+		background: url(img/dogfan-feet.png), url(img/dogfan-back.png), url(img/dogfan-power.png);
+	}
+	#main, #dogfan, #front, #fan, #back {
 		width:438px;
 		height:438px;
 	}
-	#front {
-		background-image: url(img/dogfan-front.png);
+	#main {
+		height:auto;
+		margin:0 auto;
 	}
+	#dogfan {position:relative;}
+	#front ,#fan, #back {
+		background-repeat:no-repeat;
+		background-position:center center;
+		position:absolute;
+	}
+	</style>
+	<style>
+	#main:hover #fan {
+	-webkit-transform-origin:199px 222px;
+	-webkit-animation-name: z-spin;
+    -webkit-animation-duration: 0.5s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+	-webkit-animation-fill-mode:both; 
+	}
+
+	@-webkit-keyframes z-spin {
+      0%    { -webkit-transform: rotateZ(0deg); }
+      50%   { -webkit-transform: rotateZ(180deg); }
+      100%  { -webkit-transform: rotateZ(360deg); }
+    }
 	</style>
 </head>
 <body>
-<div id="front"></div>
+<section id="main">
+	<div id="dogfan">
+		<div id="back"></div>
+		<div id="fan"></div>
+		<div id="front"></div>
+	</div>
+	<header>
+		<h1 id="">お父さん扇風機 </h1>
+		<p>graphic by @evenwu &amp; @sillyleo, html+css+js by @vincicat</p>
+		<p>* This demo doesn't support IE/Opera/FF, or older version of safari/chrome</p>
+	</header>
+</section>
 </body>
 </html>
