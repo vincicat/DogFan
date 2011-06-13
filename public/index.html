@@ -110,7 +110,7 @@
 	#fan-control { float:left; }
 	#main nav ul, #main nav ul li {
 		display: inline-block;
-		height: 24px;
+		min-height: 24px;
 		min-width: 24px;
 		line-height:24px;
 		-webkit-box-sizing: border-box;
@@ -171,6 +171,13 @@
 		background: #ffe45c;
 		color: #363636;
 	}
+	#fan-speed-slider-wrapper { 
+		width:100%; 
+		display:block;
+	}
+	#fan-speed-slider {
+		width: 13.2em;
+	}
 	</style>
 	<style>
 	/* fan spinning */
@@ -184,7 +191,7 @@
 		pointer-events:none;
 	}
 	#dogfan.on[data-fan-speed='1'] #fan {
-		-webkit-animation-duration: 700ms;
+		-webkit-animation-duration: 500ms;
 	}
 	#dogfan.on[data-fan-speed='2'] #fan {
 		-webkit-animation-duration: 300ms;
@@ -272,10 +279,12 @@
 				$fan.attr("data-fan-speed", speed);
 				$("#fan-speed-marker li.active").removeClass("active");
 				$(this).addClass("active");
+				if($fan.hasClass("on")){
 				$fan.removeClass("on");
-				setTimeout(function (){
-				    $fan.addClass("on");
-				}, 0);
+					setTimeout(function (){
+					    $fan.addClass("on");
+					}, 0);
+				}
 				
 			})
 		})
@@ -311,6 +320,8 @@
 			<li data-fan-speed="2">2</li>
 			<li data-fan-speed="3">3</li>
 			</ul></li>
+			
+			<li id="fan-speed-slider-wrapper"><input type="range" min="10" max="1000" step="10" id="fan-speed-slider" value="500"></li>
 		</ul>
 		<ul id="ah-control">
 			<li class="label"><mark>Sound</mark></li>
