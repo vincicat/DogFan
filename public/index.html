@@ -26,6 +26,10 @@
 		padding:0;
 		margin:0;
 	}
+	mark {
+		background-color: transparent;
+		color: inherit;
+	}
 	</style>
 	<style>
 	/* fan frames */
@@ -230,6 +234,9 @@
 					$(this).removeClass('on')
 				}else{
 					$ah.attr("loop",true);
+					if($("#dogfan.on").size() > 0){
+						$ah[0].play();
+					}
 					$(this).addClass('on');
 				}
 			});
