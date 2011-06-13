@@ -68,6 +68,13 @@
 		background-position:0 0;
 		position:absolute;
 	}
+	#fan {
+		top:95px;
+		left:84px;
+		width:230px;
+		height:225px;
+		background-position:center;
+	}
 	#plug { /* power event area */
 		position:absolute;
 		top: 0;
@@ -168,13 +175,22 @@
 	<style>
 	/* fan spinning */
 	#dogfan.on #fan {
-		-webkit-transform-origin:199px 222px;
+		-webkit-transform-origin: 115px 127px; /* 199-84px 222-95px; */
 		-webkit-animation-name: z-spin;
-		-webkit-animation-duration: 0.5s;
 		-webkit-animation-iteration-count: infinite;
 		-webkit-animation-timing-function: linear;
 		-webkit-animation-fill-mode:both; 
 		-webkit-animation-delay: 0.5s
+		pointer-events:none;
+	}
+	#dogfan.on[data-fan-speed='1'] #fan {
+		-webkit-animation-duration: 700ms;
+	}
+	#dogfan.on[data-fan-speed='2'] #fan {
+		-webkit-animation-duration: 300ms;
+	}
+	#dogfan.on[data-fan-speed='3'] #fan {
+		-webkit-animation-duration: 30ms;
 	}
 
 	@-webkit-keyframes z-spin {
@@ -204,12 +220,12 @@
 /*		75%	{ background-position-y: -60px;}*/
 		100%	{ background-position-y: -80px;}
     }
-	#dogfan.on #plug {
+	#dogfan.connected #plug {
 		background-position-y:0px;
 		-webkit-animation-name: none;
 		-webkit-transition: background-position 0.5s linear;
 	}
-	#dogfan.on #power { 
+	#dogfan.connected #power { 
 		background-position-y: 0px;
 	}
 	</style>
@@ -219,12 +235,12 @@
 				e.stopPropagation();
 				var $fan = $("#dogfan");
 				if(!$fan.hasClass("on")){
-					$fan.addClass("on");
+					$fan.addClass("on connected");
 					window.setTimeout(function(){
 						$("#ahahah")[0].play();
 					}, 1500); /* 3 cycle */
 				}else{
-					$fan.removeClass("on");
+					$fan.removeClass("on connected");
 				}
 			});
 			$("#ah-control-loop").click(function(e){
@@ -249,6 +265,18 @@
 					$ah[0].volume = 0;
 					$(this).addClass('lv-0');
 				}				
+			});
+			$("#fan-speed-marker li").click(function(e){
+				var speed = $(this).attr("data-fan-speed");
+				var $fan = $("#dogfan");
+				$fan.attr("data-fan-speed", speed);
+				$("#fan-speed-marker li.active").removeClass("active");
+				$(this).addClass("active");
+				$fan.removeClass("on");
+				setTimeout(function (){
+				    $fan.addClass("on");
+				}, 0);
+				
 			})
 		})
 	</script>
@@ -268,7 +296,7 @@
 </head>
 <body>
 <section id="main">
-	<div id="dogfan">
+	<div id="dogfan" data-fan-speed="1">
 		<div id="back"></div>
 		<div id="fan"></div>
 		<div id="power"></div>
@@ -279,9 +307,9 @@
 		<ul id="fan-control">
 			<li class="label"><mark>Speed</mark></li>
 			<li><ul id="fan-speed-marker">
-			<li id="fan-speed-1" class="active">1</li>
-			<li id="fan-speed-2">2</li>
-			<li id="fan-speed-3">3</li>
+			<li data-fan-speed="1" class="active">1</li>
+			<li data-fan-speed="2">2</li>
+			<li data-fan-speed="3">3</li>
 			</ul></li>
 		</ul>
 		<ul id="ah-control">
