@@ -5,7 +5,21 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>お父さん扇風機 </title>
 	<style>
+	/* Some normalization based on normalize.css */
+	/* https://raw.github.com/necolas/normalize.css/master/normalize.css */
 	article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
+	html {
+	    font-size: 100%; /* 1 */
+	    -webkit-tap-highlight-color: rgba(0,0,0,0); /* 3 */
+	    -webkit-text-size-adjust: 100%; /* 4 */
+	    -ms-text-size-adjust: 100%; /* 4 */
+	}
+	body { /* IE 6, 7 */
+	    margin: 0;
+	}
+	body,button,input,select,textarea {
+	    font-family: serif;
+	}
 	</style>
 	<style>
 	#front {
@@ -31,6 +45,11 @@
 		background-position:center center;
 		position:absolute;
 	}
+	</style>
+	<style>
+	#main aside { border-bottom: 1px solid #ccc; margin-bottom: 1em; font-family: sans-serif;}
+	#main aside h2, #main aside p { font-size: 1em; margin: 0.2em 0; }
+	#main aside h2:after { content: ": "; }
 	</style>
 	<style>
 	#main:hover #fan {
@@ -70,12 +89,25 @@
 		<div id="front"></div>
 	</div>
 	<header>
-		<h1 id="">お父さん扇風機 </h1>
-		<p>How to play: Move your mouse over the fan to turn it on</p>
-		<p>Note: This demo doesn't support IE/Opera/FF, or older version of safari/chrome</p>
-		<p>Credit: graphic by @evenwu &amp; @sillyleo, html+css+js by @vincicat</p>
-		<p>About お父さん扇風機: <a href="http://www.youtube.com/watch?v=j_6qn9FDQno&html5=1">The CM</a> <a href="http://ja.wikipedia.org/wiki/%E3%82%AB%E3%82%A4%E3%81%8F%E3%82%93">wikipedia: お父さん</a></p>
+		<h1>お父さん扇風機 </h1>
 	</header>
+	<aside id="howto">
+		<h2>How to play</h2>
+		<p>Move your mouse over the fan to turn it on</p>
+	</aside>
+	<aside id="note">
+		<h2>Note</h2>
+		<p>This demo doesn't support IE/Opera/FF, or older version of safari/chrome</p>
+	</aside>
+	<aside id="credit">
+		<h2>Credit</h2>
+		<p>graphic by <a href="http://twitter.com/evenwu">@evenwu</a> &amp; <a href="http://twitter.com/evenwu">@sillyleo</a></p>
+		<p>html+css+js by <a href="http://twitter.com/evenwu">@vincicat</a></p>
+	</aside>
+	<aside id="about">
+		<h2>About お父さん扇風機</h2>
+		<p><a href="http://www.youtube.com/watch?v=j_6qn9FDQno&amp;html5=1">The CM</a> <a href="http://ja.wikipedia.org/wiki/%E3%82%AB%E3%82%A4%E3%81%8F%E3%82%93">wikipedia: お父さん</a></p>
+	</aside>
 </section>
 </body>
 </html>
