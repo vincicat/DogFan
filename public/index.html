@@ -4,6 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>お父さん扇風機 </title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 	<style>
 	/* Some normalization based on normalize.css */
 	/* https://raw.github.com/necolas/normalize.css/master/normalize.css */
@@ -22,16 +23,8 @@
 	}
 	</style>
 	<style>
-	#front {
-		background: url(img/dogfan-face.png), url(img/dogfan-front.png);
-	}
-	#fan {
-		background: url(img/dogfan-fan.png);
-	}
-	#back {
-		background: url(img/dogfan-feet.png), url(img/dogfan-back.png), url(img/dogfan-power.png);
-	}
-	#main, #dogfan, #front, #fan, #back {
+	/* fan frames */
+	#main, #dogfan, #front, #fan, #back, #power {
 		width:438px;
 		height:438px;
 	}
@@ -39,33 +32,111 @@
 		height:auto;
 		margin:0 auto;
 	}
-	#dogfan {position:relative;}
-	#front ,#fan, #back {
+	#front { /* expose the power cord */
+		width:378px;
+	}
+	#plug { /* power event area */
+		width: 60px;
+		height: 186px;
+	}
+	/* define image */
+	#front {
+		background: url(img/dogfan-face.png), url(img/dogfan-front.png), url(img/dogfan-feet.png);
+	}
+	#fan {
+		background: url(img/dogfan-fan.png);
+	}
+	#back {
+		background: url(img/dogfan-back.png);
+	}
+	#power {
+		background: url(img/dogfan-power.png)
+	}
+	/* position */
+	#dogfan { position:relative; }
+	#front ,#fan, #back, #power {
 		background-repeat:no-repeat;
-		background-position:center center;
+		background-position:0 0;
 		position:absolute;
+	}
+	#plug { /* power event area */
+		position:absolute;
+		top: 0;
+		right:0;
+		background: url(img/dogfan-plug.png) right -80px no-repeat;
 	}
 	</style>
 	<style>
-	#main aside { border-bottom: 1px solid #ccc; margin-bottom: 1em; font-family: sans-serif;}
-	#main aside h2, #main aside p { font-size: 1em; margin: 0.2em 0; }
+	#main aside { 
+		border-bottom: 1px solid #ccc; 
+		margin-bottom: 1em; 
+		font-family: sans-serif;
+	}
+	#main aside h2, #main aside p { 
+		font-size: 1em; 
+		margin: 0.2em 0; 
+	}
 	</style>
 	<style>
-	#main:hover #fan {
-	-webkit-transform-origin:199px 222px;
-	-webkit-animation-name: z-spin;
-    -webkit-animation-duration: 0.5s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-timing-function: linear;
-	-webkit-animation-fill-mode:both; 
+	/* fan spinning */
+	#dogfan.on #fan {
+		-webkit-transform-origin:199px 222px;
+		-webkit-animation-name: z-spin;
+		-webkit-animation-duration: 0.5s;
+		-webkit-animation-iteration-count: infinite;
+		-webkit-animation-timing-function: linear;
+		-webkit-animation-fill-mode:both; 
+		-webkit-animation-delay: 0.5s
 	}
 
 	@-webkit-keyframes z-spin {
-      0%    { -webkit-transform: rotateZ(0deg); }
-      50%   { -webkit-transform: rotateZ(180deg); }
-      100%  { -webkit-transform: rotateZ(360deg); }
+		0%	{ -webkit-transform: rotateZ(0deg); }
+		50%	{ -webkit-transform: rotateZ(180deg); }
+		100%	{ -webkit-transform: rotateZ(360deg); }
     }
+	/* power cord & plug */
+	#dogfan #plug {
+		-webkit-transform-origin:50% 0;
+		-webkit-animation-name: cord-flipping, cord-bumping;
+		-webkit-animation-duration: 1s, 1s;
+		-webkit-animation-iteration-count: 1,1;
+		-webkit-animation-timing-function: ease-out, ease;
+		-webkit-animation-fill-mode:both,both;
+/*		-webkit-animation-delay: 1.2s, 0;*/
+	}
+	@-webkit-keyframes cord-flipping {
+		0%	{ -webkit-transform: rotateZ(0deg); -webkit-animation-timing-function: ease-in;}
+		25%	{ -webkit-transform: rotateZ(15deg); -webkit-animation-timing-function: ease-in;}
+		50%	{ -webkit-transform: rotateZ(0deg); -webkit-animation-timing-function: ease-out;}
+		75%	{ -webkit-transform: rotateZ(-15deg); -webkit-animation-timing-function: ease-out;}
+		100%	{ -webkit-transform: rotateZ(0deg); -webkit-animation-timing-function: ease-out;}
+    }
+	@-webkit-keyframes cord-bumping {
+		0%	{ background-position-y: -100px;}
+/*		75%	{ background-position-y: -60px;}*/
+		100%	{ background-position-y: -80px;}
+    }
+	#dogfan.on #plug {
+		background-position-y:0px;
+		-webkit-animation-name: none;
+		-webkit-transition: background-position 0.5s linear;
+	}
+	#dogfan.on #power { 
+		background-position-y: 0px;
+	}
 	</style>
+	<script>
+		$(document).ready(function(e){
+			$("#plug, #power").click(function(e){
+				var $fan = $("#dogfan");
+				if(!$fan.hasClass("on")){
+					$fan.addClass("on");
+				}else{
+					$fan.removeClass("on");
+				}
+			})
+		})
+	</script>
 	<script type="text/javascript">
 
 	  var _gaq = _gaq || [];
@@ -85,7 +156,9 @@
 	<div id="dogfan">
 		<div id="back"></div>
 		<div id="fan"></div>
+		<div id="power"></div>
 		<div id="front"></div>
+		<div id="plug"></div>
 	</div>
 	<header>
 		<h1>お父さん扇風機 </h1>
