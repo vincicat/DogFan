@@ -19,7 +19,12 @@
 	    margin: 0;
 	}
 	body,button,input,select,textarea {
-	    font-family: serif;
+	    font-family: sans-serif;
+	}
+	nav ul {
+		list-style:none;
+		padding:0;
+		margin:0;
 	}
 	</style>
 	<style>
@@ -72,14 +77,88 @@
 	}
 	</style>
 	<style>
+	#main h1 {
+		font-family: 'Hiragino Mincho ProN', serif;
+		margin: 0.2em 0;
+	}
 	#main aside { 
 		border-bottom: 1px solid #ccc; 
-		margin-bottom: 1em; 
-		font-family: sans-serif;
+		margin-bottom: 1em;
 	}
 	#main aside h2, #main aside p { 
 		font-size: 1em; 
 		margin: 0.2em 0; 
+	}
+	/* controls */
+	#main nav ul, #main nav ul li {
+		-webkit-padding-start: 0;
+	}
+	#main nav, #main nav ul { overflow: hidden; }
+	#main nav ul li { float: left; }
+	#ah-control { float:right; }
+	#fan-control { float:left; }
+	#main nav ul, #main nav ul li {
+		display: inline-block;
+		height: 24px;
+		min-width: 24px;
+		line-height:24px;
+		-webkit-box-sizing: border-box;
+	}
+	#main nav ul .label { 
+		font-size: smaller;
+		border: 1px solid #d4ccb0;
+		background: #ece8da;
+		color: #433f38;
+		border-radius:5px;
+		width:auto;
+		margin-right:1em;
+	}
+	#main nav ul .label mark {
+		margin:0 0.4em;
+	}
+	#ah-control-loop, #ah-control-vol { 
+		width:24px;
+		height:24px;
+		margin-right: 0.6em;
+		cursor:pointer;
+	}
+	#ah-control-loop:hover, #ah-control-vol:hover {
+		opacity: 0.8;
+	}
+	#ah-control-loop {
+		opacity: 0.5;
+		background: url(img/ico_media-repeat.png);
+	}
+	#ah-control-loop.on {
+		opacity: 1.0;
+		-webkit-transition: all 1s ease; 
+	}
+	#ah-control-vol {
+		padding-left:24px;
+	}
+	#ah-control-vol.lv-3 {
+		background: url(img/ico_media-volume-3.png);
+	}
+	#ah-control-vol.lv-0 {
+		background: url(img/ico_media-volume-0.png);
+	}
+	/* Fan speed */
+	#fan-speed-marker li { 
+		padding: 0.1em;
+		margin-right: 0.6em;
+		width: auto !important;
+		text-align:center;	
+		cursor:pointer;
+	}
+	#fan-speed-marker li:hover {
+		background: #fdf5ce;
+		color: #ef8c08;
+		border: 1px solid #fbcb09;
+	}
+	#fan-speed-marker .active {
+		border: 1px solid #fed22f;
+		background: #ffe45c;
+		color: #363636;
 	}
 	</style>
 	<style>
@@ -133,13 +212,36 @@
 	<script>
 		$(document).ready(function(e){
 			$("#plug, #power").click(function(e){
+				e.stopPropagation();
 				var $fan = $("#dogfan");
 				if(!$fan.hasClass("on")){
 					$fan.addClass("on");
+					window.setTimeout(function(){
+						$("#ahahah")[0].play();
+					}, 1500); /* 3 cycle */
 				}else{
 					$fan.removeClass("on");
 				}
-				e.stopPropogation();
+			});
+			$("#ah-control-loop").click(function(e){
+				var $ah = $("#ahahah");
+				if($ah.attr("loop")){
+					$ah.removeAttr('loop');
+					$(this).removeClass('on')
+				}else{
+					$ah.attr("loop",true);
+					$(this).addClass('on');
+				}
+			});
+			$("#ah-control-vol").click(function(e){
+				var $ah = $("#ahahah");
+				if($ah[0].volume === 0){
+					$ah[0].volume = 1;
+					$(this).addClass('lv-3');
+				}else{
+					$ah[0].volume = 0;
+					$(this).addClass('lv-0');
+				}				
 			})
 		})
 	</script>
@@ -166,6 +268,21 @@
 		<div id="front"></div>
 		<div id="plug"></div>
 	</div>
+	<nav>
+		<ul id="fan-control">
+			<li class="label"><mark>Speed</mark></li>
+			<li><ul id="fan-speed-marker">
+			<li id="fan-speed-1" class="active">1</li>
+			<li id="fan-speed-2">2</li>
+			<li id="fan-speed-3">3</li>
+			</ul></li>
+		</ul>
+		<ul id="ah-control">
+			<li class="label"><mark>Sound</mark></li>
+			<li id="ah-control-loop"class="off" title="loop"></li>
+			<li id="ah-control-vol" class="lv-3" title="volume"></li>
+		</ul>
+	</nav>
 	<header>
 		<h1>お父さん扇風機 </h1>
 	</header>
@@ -186,6 +303,7 @@
 		<h2>About お父さん扇風機</h2>
 		<p><a href="http://www.youtube.com/watch?v=j_6qn9FDQno&amp;html5=1">The CM</a> <a href="http://ja.wikipedia.org/wiki/%E3%82%AB%E3%82%A4%E3%81%8F%E3%82%93">wikipedia: お父さん</a></p>
 	</aside>
+	<audio src="media/ahahah.mp3" preload="auto" id="ahahah"></audio>
 </section>
 </body>
 </html>
