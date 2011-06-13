@@ -176,7 +176,7 @@
 		display:block;
 	}
 	#fan-speed-slider {
-		width: 13.2em;
+		width: 10.2em;
 	}
 	</style>
 	<style>
@@ -237,6 +237,17 @@
 	}
 	</style>
 	<script>
+	var Dogfan = {
+		resetAnimation: function(){
+			var $fan = $("#dogfan");
+			if($fan.hasClass("on")){
+				$fan.removeClass("on");
+				setTimeout(function (){
+				    $fan.addClass("on");
+				}, 0);
+			}
+		}
+	}
 		$(document).ready(function(e){
 			$("#plug, #power").click(function(e){
 				e.stopPropagation();
@@ -279,13 +290,20 @@
 				$fan.attr("data-fan-speed", speed);
 				$("#fan-speed-marker li.active").removeClass("active");
 				$(this).addClass("active");
-				if($fan.hasClass("on")){
-				$fan.removeClass("on");
-					setTimeout(function (){
-					    $fan.addClass("on");
-					}, 0);
+				Dogfan.resetAnimation();
+			});
+			
+			$("#fan-speed-slider").mouseup(function(e){
+				var value = $(this).val();
+				if(isNaN(parseInt(value))){ 
+					alert(value);
+					return false; 
 				}
-				
+				var $fan = $("#dogfan");
+				$fan.removeAttr("data-fan-speed");
+				Dogfan.resetAnimation();
+				console.log(value);
+				$('#fan')[0].style['webkitAnimationDuration'] = value+"ms";
 			})
 		})
 	</script>
@@ -321,7 +339,7 @@
 			<li data-fan-speed="3">3</li>
 			</ul></li>
 			
-			<li id="fan-speed-slider-wrapper"><input type="range" min="10" max="1000" step="10" id="fan-speed-slider" value="500"></li>
+			<li id="fan-speed-slider-wrapper"><mark class="fast">F</mark><input type="range" min="10" max="1000" step="10" id="fan-speed-slider" value="500"><mark class="slow">S</mark></li>
 		</ul>
 		<ul id="ah-control">
 			<li class="label"><mark>Sound</mark></li>
