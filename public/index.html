@@ -42,7 +42,7 @@
 		margin:0 auto;
 	}
 	#front { /* expose the power cord */
-		width:378px;
+		width:388px;
 	}
 	#plug { /* power event area */
 		width: 60px;
@@ -50,13 +50,13 @@
 	}
 	/* define image */
 	#front {
-		background: url(img/dogfan-face.png), url(img/dogfan-front.png), url(img/dogfan-feet.png);
+		background: url(img/dogfan-face.png), url(img/dogfan-front.png);
 	}
 	#fan {
 		background: url(img/dogfan-fan.png);
 	}
 	#back {
-		background: url(img/dogfan-back.png);
+		background: url(img/dogfan-back.png),  url(img/dogfan-feet.png);
 	}
 	#power {
 		background: url(img/dogfan-power.png)
@@ -166,6 +166,7 @@
 		width: auto !important;
 		text-align:center;	
 		cursor:pointer;
+		border: 1px solid #fff;
 	}
 	#fan-speed-marker li:hover {
 		background: #fdf5ce;
@@ -184,6 +185,12 @@
 	#fan-speed-slider {
 		width: 10.2em;
 	}
+	abbr[title="slow"]{
+		color:#00f;
+	}
+	abbr[title="fast"]{
+		color:#f00;
+	}
 	</style>
 	<style>
 	/* fan spinning */
@@ -193,7 +200,7 @@
 		-webkit-animation-iteration-count: infinite;
 		-webkit-animation-timing-function: linear;
 		-webkit-animation-fill-mode:both; 
-		-webkit-animation-delay: 0.5s
+		-webkit-animation-delay: 0.5s;
 		pointer-events:none;
 	}
 	#dogfan.on[data-fan-speed='1'] #fan {
@@ -205,11 +212,27 @@
 	#dogfan.on[data-fan-speed='3'] #fan {
 		-webkit-animation-duration: 30ms;
 	}
-
 	@-webkit-keyframes z-spin {
 		0%	{ -webkit-transform: rotateZ(0deg); }
 		50%	{ -webkit-transform: rotateZ(180deg); }
 		100%	{ -webkit-transform: rotateZ(360deg); }
+    }
+	/* shaking frame */
+	#dogfan.on #front.highspeed {
+		-webkit-animation-name: offset-shake;
+		-webkit-animation-iteration-count: infinite;
+		-webkit-animation-timing-function: ease;
+		-webkit-animation-fill-mode:both; 
+		-webkit-animation-delay: 0.5s;
+		-webkit-animation-duration: 500ms;
+	}
+	@-webkit-keyframes offset-shake {
+		0% { background-position: 0 0, 0 0;}
+		10%	{ background-position: -10px 0px, 0px -10px;}
+		30%	{ background-position: 0px 10px, 0px 10px;}
+		50%	{ background-position: 0px -10px, -10px -0px;}
+		75% { background-position: 0px 0px, 0px 0px;}
+		100%	{ background-position: 0 -10px, 10px 0;}
     }
 	/* power cord & plug */
 	#dogfan #plug {
@@ -243,17 +266,36 @@
 	}
 	</style>
 	<script>
-	var Dogfan = {
-		resetAnimation: function(){
-			var $fan = $("#dogfan");
-			if($fan.hasClass("on")){
-				$fan.removeClass("on");
-				setTimeout(function (){
-				    $fan.addClass("on");
-				}, 0);
+		var Dogfan = {
+			resetAnimation: function(level, speed){
+				var $fan = $("#dogfan");
+				speed = speed || 500;
+				if($fan.hasClass("on")){
+					$fan.removeClass("on");
+					setTimeout(function (){
+					    $fan.addClass("on");
+					}, 0);
+				}
+				if(level >= 3 || speed <= 100){
+					//console.log("High speed", level, speed);
+					var $front = $("#front");
+					$front.addClass("highspeed");
+					if (speed<= 100){ 
+						var speedindex = ["100","150","200","250","275","300", "325", "350", "375", "300"];
+						$front[0].style['webkitAnimationDuration'] = speedindex[speed/10-1]+"ms"; 
+					}
+				}else{
+					//console.log("Normal", level, speed)
+					$("#front.highspeed").each(function(i){
+						$(this).removeClass("highspeed");
+						this.style['webkitAnimationDuration'] = "";
+					});
+				}
+			},
+			deactiveSpeedMarker: function(){
+				$("#fan-speed-marker li.active").removeClass("active");
 			}
 		}
-	}
 		$(document).ready(function(e){
 			$("#plug, #power").click(function(e){
 				e.stopPropagation();
@@ -294,20 +336,24 @@
 				var speed = $(this).attr("data-fan-speed");
 				var $fan = $("#dogfan");
 				$fan.attr("data-fan-speed", speed);
-				$("#fan-speed-marker li.active").removeClass("active");
+				$('#fan')[0].style['webkitAnimationDuration'] = "";
+				Dogfan.deactiveSpeedMarker();
 				$(this).addClass("active");
-				Dogfan.resetAnimation();
+				Dogfan.resetAnimation(speed);
+			//	console.log(window.getComputedStyle($('#fan')[0],null)['-webkit-animation-duration']); it failed, strange	
 			});
 			
 			$("#fan-speed-slider").mouseup(function(e){
 				var value = $(this).val();
-				if(isNaN(parseInt(value))){ 
-					alert(value);
+				value = parseInt(value);
+				if(isNaN(value)){ 
 					return false; 
 				}
+				value = Math.abs(value);
 				var $fan = $("#dogfan");
 				$fan.removeAttr("data-fan-speed");
-				Dogfan.resetAnimation();
+				Dogfan.deactiveSpeedMarker();
+				Dogfan.resetAnimation(-1, value);
 				console.log(value);
 				$('#fan')[0].style['webkitAnimationDuration'] = value+"ms";
 			})
@@ -345,7 +391,7 @@
 			<li data-fan-speed="3">3</li>
 			</ul></li>
 			
-			<li id="fan-speed-slider-wrapper"><mark class="fast">F</mark><input type="range" min="10" max="1000" step="10" id="fan-speed-slider" value="500"><mark class="slow">S</mark></li>
+			<li id="fan-speed-slider-wrapper"><abbr title="slow">S</abbr><input type="range" min="-1000" max="-10" step="10" id="fan-speed-slider" value="-500"><abbr title="fast">F</abbr></li>
 		</ul>
 		<ul id="ah-control">
 			<li class="label"><mark>Sound</mark></li>
