@@ -267,8 +267,20 @@
 	</style>
 	<script>
 		var Dogfan = {
-			resetAnimation: function(level, speed){
+			self: null,
+			
+			setSpeedLevel:function(level){
 				var $fan = $("#dogfan");
+				$fan.attr("data-fan-speed", level);
+				$('#fan')[0].style['webkitAnimationDuration'] = "";
+			},
+			setSpeedInterval: function(interval){
+				var $fan = $("#dogfan");
+				$fan.removeAttr("data-fan-speed");
+				$('#fan')[0].style['webkitAnimationDuration'] = interval+"ms";
+			},
+			resetAnimation: function(level, speed){//speed level and speed interval
+				var $fan = this.$self;
 				speed = speed || 500;
 				if($fan.hasClass("on")){
 					$fan.removeClass("on");
@@ -295,53 +307,86 @@
 					});
 				}
 			},
-			deactiveSpeedMarker: function(){
-				$("#fan-speed-marker li.active").removeClass("active");
-			}
-		}
-		$(document).ready(function(e){
-			$("#plug, #power").click(function(e){
-				e.stopPropagation();
-				var $fan = $("#dogfan");
+			powerOn: function(){
+				var $fan = this.$self;
+				$fan.addClass("on connected");
+				window.setTimeout(function(){
+					$("#ahahah")[0].play();
+				}, 1500); /* 3 cycle */
+			},
+			powerOff:function(){
+				var $fan = this.$self;
+				$fan.removeClass("on connected");
+				$("#ahahah")[0].pause();
+			},
+			powerToggle:function(){
+				var $fan = this.$self;
 				if(!$fan.hasClass("on")){
-					$fan.addClass("on connected");
-					window.setTimeout(function(){
-						$("#ahahah")[0].play();
-					}, 1500); /* 3 cycle */
+					this.powerOn();
 				}else{
-					$fan.removeClass("on connected");
+					this.powerOff();
 				}
-			});
-			$("#ah-control-loop").click(function(e){
+			},
+			init:function(){			
+				this.$self = $("#dogfan");	
+				$("#plug, #power").click(function(e){
+					e.stopPropagation();
+					Dogfan.powerToggle();
+					$(this).blur();
+				});
+			}
+		};
+		var Dogfan_SpeedMarker = {
+			activate: function(marker){
+				this.deactivate();
+				marker.addClass("active");
+			},
+			deactivate: function(){
+				$("#fan-speed-marker li.active").removeClass("active");
+			},
+		};
+		var Dogfan_Ah = {
+			loop: function(control){
 				var $ah = $("#ahahah");
 				if($ah.attr("loop")){
 					$ah.removeAttr('loop');
-					$(this).removeClass('on')
+					control.removeClass('on')
 				}else{
 					$ah.attr("loop",true);
 					if($("#dogfan.on").size() > 0){
 						$ah[0].play();
 					}
-					$(this).addClass('on');
+					control.addClass('on');
 				}
+			},
+			setVolumeLevel:function(mute, level){
+				mute.attr('class', '');
+				mute.addClass('lv-'+level);
+			},
+			muteToggle: function(mute){
+				var $ah = $("#ahahah");
+				var self = $ah[0];
+				if(self.volume === 0){
+					self.volume = 1;
+					this.setVolumeLevel(mute, 3);
+				}else{
+					self.volume = 0;
+					this.setVolumeLevel(mute, 0);
+				}
+			}
+		};
+		$(document).ready(function(e){
+			Dogfan.init();
+			$("#ah-control-loop").click(function(e){
+				Dogfan_Ah.loop($(this));
 			});
 			$("#ah-control-vol").click(function(e){
-				var $ah = $("#ahahah");
-				if($ah[0].volume === 0){
-					$ah[0].volume = 1;
-					$(this).addClass('lv-3');
-				}else{
-					$ah[0].volume = 0;
-					$(this).addClass('lv-0');
-				}				
+				Dogfan_Ah.muteToggle($(this));
 			});
 			$("#fan-speed-marker li").click(function(e){
 				var speed = $(this).attr("data-fan-speed");
-				var $fan = $("#dogfan");
-				$fan.attr("data-fan-speed", speed);
-				$('#fan')[0].style['webkitAnimationDuration'] = "";
-				Dogfan.deactiveSpeedMarker();
-				$(this).addClass("active");
+				Dogfan.setSpeedLevel(speed);
+				Dogfan_SpeedMarker.activate($(this));
 				Dogfan.resetAnimation(speed);
 			//	console.log(window.getComputedStyle($('#fan')[0],null)['-webkit-animation-duration']); it failed, strange	
 			});
@@ -353,13 +398,11 @@
 					return false; 
 				}
 				value = Math.abs(value);
-				var $fan = $("#dogfan");
-				$fan.removeAttr("data-fan-speed");
-				Dogfan.deactiveSpeedMarker();
+				console.log("Fan Speed",value);
+				Dogfan_SpeedMarker.deactivate();
+				Dogfan.setSpeedInterval(value);
 				Dogfan.resetAnimation(-1, value);
-				console.log(value);
-				$('#fan')[0].style['webkitAnimationDuration'] = value+"ms";
-			})
+			});
 		})
 	</script>
 	<script type="text/javascript">
