@@ -276,12 +276,15 @@
 					    $fan.addClass("on");
 					}, 0);
 				}
-				if(level >= 3 || speed <= 100){
+				if(level >= 3 || speed <= 200){
 					//console.log("High speed", level, speed);
 					var $front = $("#front");
 					$front.addClass("highspeed");
-					if (speed<= 100){ 
-						var speedindex = ["100","150","200","250","275","300", "325", "350", "375", "300"];
+					if (speed<= 200){ 
+						var speedindex = [
+						"125", "125", "125", "125", "125", "125", "130", "135", "140", "145",
+						"155", "165", "175", "200", "225", "250", "275", "300", "325", "350"];
+					
 						$front[0].style['webkitAnimationDuration'] = speedindex[speed/10-1]+"ms"; 
 					}
 				}else{
