@@ -25,7 +25,7 @@ Please kindly keep the credit of contributors.
 ## Note for fork / Hosting
 Just Pick everything under `public/`
 
-**IMPORTANT: Please kindly remove the google analytic code in `<head>`**
+**IMPORTANT: Please kindly remove the google analytic code in &lt;head&gt;**
 
 p.s. If you fork or host your own version of fan, please kindly contact [@evenwu](http://twitter.com/evenwu) , he is making a list of Tamakinotosan fan
 
@@ -70,7 +70,7 @@ MIT
 ## fork和hosting的注意事項
 你只要copy `public/` 的東西就好了
 
-** 重要事項: 請把 `<head>` 的 google analytic的code移除 **
+** 重要事項: 請把 `&lt;head&gt;` 的 google analytic的code移除 **
 
 p.s. 如果你fork了這個repo或者自己做了改版可以聯絡 [@evenwu](http://twitter.com/evenwu) ，他在做お父さん風扇列表...
 
