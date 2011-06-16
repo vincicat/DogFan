@@ -23,7 +23,7 @@ MIT.
 Please kindly keep the credit of contributors.
 
 ## Note for fork / Hosting
-Just Pick everything under `public/`
+Just Pick everything under `public/`
 
 **IMPORTANT: Please kindly remove the google analytic code in head**
 
