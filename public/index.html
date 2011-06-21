@@ -467,7 +467,9 @@
 					$ah.attr("data-loop", true);
 					if($("#dogfan.on").size() > 0){
 						console.log("Loop play");
-						$ah[0].currentTime = 0; // this should be not needed, but chrome need pointer reset...
+						if(this.loop_mode !== this.LP.PLAY){
+							$ah[0].currentTime = 0; // this should be not needed, but chrome need pointer reset...		
+						}
 						$ah[0].play();
 					}
 					control.addClass('on');
@@ -581,7 +583,7 @@
 		<p><a href="http://www.youtube.com/watch?v=j_6qn9FDQno&amp;html5=1">The CM</a> <a href="http://ja.wikipedia.org/wiki/%E3%82%AB%E3%82%A4%E3%81%8F%E3%82%93">wikipedia: お父さん</a></p>
 	</aside>
 	<audio preload="auto" id="ahahah">
-		<source src="media/ahahah.mp3">
+		<source src="media/ahahah.mp3" type="audio/mpeg">
 		<source src="media/ahahah.wav">
 	</audio>
 </section>
