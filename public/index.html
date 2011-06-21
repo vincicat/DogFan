@@ -467,7 +467,7 @@
 					$ah.attr("data-loop", true);
 					if($("#dogfan.on").size() > 0){
 						console.log("Loop play");
-						$ah[0].currentTime = 0;
+						$ah[0].currentTime = 0; // this should be not needed, but chrome need pointer reset...
 						$ah[0].play();
 					}
 					control.addClass('on');
