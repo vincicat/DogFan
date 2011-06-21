@@ -379,6 +379,7 @@
 			powerOn: function(){
 				var $fan = this.$self;
 				$fan.addClass("on connected");
+				Dogfan_Ah.init();
 				window.setTimeout(function(){
 					$("#ahahah")[0].play();
 				}, 1500); /* 3 cycle */
@@ -415,14 +416,58 @@
 			},
 		};
 		var Dogfan_Ah = {
+			LP: { PLAY: 1, FUNC: 2, ATTR: 3 },
+			loop_mode: -1, 
+			init:function(){
+				if(navigator.platform === "iPhone" || navigator.platform == "iPad"){ //iOS, problematic
+					this.loop_mode = this.LP.PLAY;
+				}else if(/[^.]+$/.exec($("#ahahah")[0].currentSrc) == "wav"){ //firefox
+					this.loop_mode = this.LP.FUNC;
+				}else{ //other nice modern browser
+					this.loop_mode = this.LP.ATTR;
+				}
+			},
+			force_loop: function(e){
+				this.currentTime = 0;
+			},
 			loop: function(control){
 				var $ah = $("#ahahah");
-				if($ah.attr("loop")){
-					$ah.removeAttr('loop');
-					control.removeClass('on')
+				console.log(this, this.loop_mode);
+				if($ah.attr("data-loop")){
+					switch(this.loop_mode){ 
+						case this.LP.PLAY:
+							$ah[0].onended="" ;
+						break;
+						case this.LP.FUNC:
+							$ah[0].removeEventListener('ended', Dogfan_Ah.force_loop , false);
+						break;
+						case this.LP.ATTR:
+						default:
+							$ah.removeAttr("loop");
+						break;
+					}
+					$ah.removeAttr("data-loop");
+					control.removeClass('on');
 				}else{
-					$ah.attr("loop",true);
+					switch(this.loop_mode){ 
+						case this.LP.PLAY:
+							console.log("play()");
+							$ah[0].onended="this.play();" ;
+						break;
+						case this.LP.FUNC:
+							console.log("callback function");
+							$ah[0].addEventListener('ended', Dogfan_Ah.force_loop , false);
+						break;
+						case this.LP.ATTR:
+						default:
+							console.log("attr()");
+							$ah.attr("loop",true);
+						break;
+					}
+					$ah.attr("data-loop", true);
 					if($("#dogfan.on").size() > 0){
+						console.log("Loop play");
+						$ah[0].currentTime = 0;
 						$ah[0].play();
 					}
 					control.addClass('on');
@@ -535,7 +580,10 @@
 		<h2>About お父さん扇風機</h2>
 		<p><a href="http://www.youtube.com/watch?v=j_6qn9FDQno&amp;html5=1">The CM</a> <a href="http://ja.wikipedia.org/wiki/%E3%82%AB%E3%82%A4%E3%81%8F%E3%82%93">wikipedia: お父さん</a></p>
 	</aside>
-	<audio src="media/ahahah.mp3" preload="auto" id="ahahah"></audio>
+	<audio preload="auto" id="ahahah">
+		<source src="media/ahahah.mp3">
+		<source src="media/ahahah.wav">
+	</audio>
 </section>
 </body>
 </html>
