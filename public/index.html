@@ -421,7 +421,7 @@
 			init:function(){
 				if(navigator.platform === "iPhone" || navigator.platform == "iPad"){ //iOS, problematic
 					this.loop_mode = this.LP.PLAY;
-					$("#ahahah").controls = true;
+					$("#ahahah")[0].controls = true;
 				}else if(/[^.]+$/.exec($("#ahahah")[0].currentSrc) == "wav"){ //firefox
 					this.loop_mode = this.LP.FUNC;
 				}else{ //other nice modern browser
