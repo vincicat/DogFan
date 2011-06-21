@@ -144,20 +144,25 @@
 	}
 	#ah-control-loop {
 		opacity: 0.5;
-		background: url(img/ico_media-repeat.png);
+		background: url(img/ico_media-repeat.png) no-repeat;
 	}
 	#ah-control-loop.on {
 		opacity: 1.0;
 		-webkit-transition: all 1s ease; 
+		-moz-transition: all 1s ease;
 	}
 	#ah-control-vol {
 		padding-left:24px;
 	}
 	#ah-control-vol.lv-3 {
-		background: url(img/ico_media-volume-3.png);
+		background: url(img/ico_media-volume-3.png) no-repeat;
+		-webkit-transition: all 1s ease; 
+		-moz-transition: all 1s ease;
 	}
 	#ah-control-vol.lv-0 {
-		background: url(img/ico_media-volume-0.png);
+		background: url(img/ico_media-volume-0.png) no-repeat;
+		-webkit-transition: all 1s ease; 
+		-moz-transition: all 1s ease;
 	}
 	/* Fan speed */
 	#fan-speed-marker li { 
@@ -201,22 +206,42 @@
 		-webkit-animation-timing-function: linear;
 		-webkit-animation-fill-mode:both; 
 		-webkit-animation-delay: 0.5s;
+		
+		-moz-transform-origin: 115px 127px; /* 199-84px 222-95px; */
+		-moz-animation-name: z-spin;
+		-moz-animation-iteration-count: infinite;
+		-moz-animation-timing-function: linear;
+		-moz-animation-fill-mode:both; 
+		-moz-animation-delay: 0.5s;
+		
 		pointer-events:none;
 	}
 	#dogfan.on[data-fan-speed='1'] #fan {
 		-webkit-animation-duration: 500ms;
+		-moz-animation-duration: 500ms;
 	}
 	#dogfan.on[data-fan-speed='2'] #fan {
 		-webkit-animation-duration: 300ms;
+		-moz-animation-duration: 300ms;
 	}
 	#dogfan.on[data-fan-speed='3'] #fan {
 		-webkit-animation-duration: 30ms;
+		-moz-animation-duration: 30ms;
 	}
 	@-webkit-keyframes z-spin {
 		0%	{ -webkit-transform: rotateZ(0deg); }
+		25%	{ -webkit-transform: rotateZ(90deg); }
 		50%	{ -webkit-transform: rotateZ(180deg); }
+		75% { -webkit-transform: rotateZ(270deg); }
 		100%	{ -webkit-transform: rotateZ(360deg); }
     }
+	@-moz-keyframes z-spin {
+		0%	{ -moz-transform: rotate(0deg); }
+		25%	{ -moz-transform: rotate(90deg); }
+		50%	{ -moz-transform: rotate(180deg); }
+		75% { -moz-transform: rotate(270deg); }
+		100%	{ -moz-transform: rotate(360deg); }		
+	}
 	/* shaking frame */
 	#dogfan.on #front.highspeed {
 		-webkit-animation-name: offset-shake;
@@ -225,6 +250,13 @@
 		-webkit-animation-fill-mode:both; 
 		-webkit-animation-delay: 0.5s;
 		-webkit-animation-duration: 500ms;
+		
+		-moz-animation-name: offset-shake;
+		-moz-animation-iteration-count: infinite;
+		-moz-animation-timing-function: ease;
+		-moz-animation-fill-mode:both; 
+		-moz-animation-delay: 0.5s;
+		-moz-animation-duration: 500ms;
 	}
 	@-webkit-keyframes offset-shake {
 		0% { background-position: 0 0, 0 0;}
@@ -234,6 +266,16 @@
 		75% { background-position: 0px 0px, 0px 0px;}
 		100%	{ background-position: 0 -10px, 10px 0;}
     }
+
+	@-moz-keyframes offset-shake {
+		0% { background-position: 0 0, 0 0;}
+		10%	{ background-position: -10px 0px, 0px -10px;}
+		30%	{ background-position: 0px 10px, 0px 10px;}
+		50%	{ background-position: 0px -10px, -10px -0px;}
+		75% { background-position: 0px 0px, 0px 0px;}
+		100%	{ background-position: 0 -10px, 10px 0;}
+    }
+
 	/* power cord & plug */
 	#dogfan #plug {
 		-webkit-transform-origin:50% 0;
@@ -242,6 +284,14 @@
 		-webkit-animation-iteration-count: 1,1;
 		-webkit-animation-timing-function: ease-out, ease;
 		-webkit-animation-fill-mode:both,both;
+		
+		-moz-transform-origin:50% 0;
+		-moz-animation-name: cord-flipping, cord-bumping;
+		-moz-animation-duration: 1s, 1s;
+		-moz-animation-iteration-count: 1,1;
+		-moz-animation-timing-function: ease-out, ease;
+		-moz-animation-fill-mode:both,both;
+		
 /*		-webkit-animation-delay: 1.2s, 0;*/
 	}
 	@-webkit-keyframes cord-flipping {
@@ -256,13 +306,28 @@
 /*		75%	{ background-position-y: -60px;}*/
 		100%	{ background-position-y: -80px;}
     }
+
+	@-moz-keyframes cord-flipping {
+		0%	{ -moz-transform: rotate(0deg); -moz-animation-timing-function: ease-in;}
+		25%	{ -moz-transform: rotate(15deg); -moz-animation-timing-function: ease-in;}
+		50%	{ -moz-transform: rotate(0deg); -moz-animation-timing-function: ease-out;}
+		75%	{ -moz-transform: rotate(-15deg); -moz-animation-timing-function: ease-out;}
+		100%	{ -moz-transform: rotate(0deg); -moz-animation-timing-function: ease-out;}
+    }
+	@-moz-keyframes cord-bumping {
+		0%	{ background-position: 100% -100px;}
+		100%	{ background-position: 100% -80px;}
+    }
+	
 	#dogfan.connected #plug {
-		background-position-y:0px;
+		background-position: 100% 0px;
 		-webkit-animation-name: none;
 		-webkit-transition: background-position 0.5s linear;
+		-moz-animation-name: none;
+		-moz-transition: background-position 0.5s linear;
 	}
 	#dogfan.connected #power { 
-		background-position-y: 0px;
+		background-position: 100% 0px;
 	}
 	</style>
 	<script>
@@ -273,11 +338,13 @@
 				var $fan = $("#dogfan");
 				$fan.attr("data-fan-speed", level);
 				$('#fan')[0].style['webkitAnimationDuration'] = "";
+				$('#fan')[0].style['mozAnimationDuration'] = "";
 			},
 			setSpeedInterval: function(interval){
 				var $fan = $("#dogfan");
 				$fan.removeAttr("data-fan-speed");
 				$('#fan')[0].style['webkitAnimationDuration'] = interval+"ms";
+				$('#fan')[0].style['mozAnimationDuration'] = interval+"ms";
 			},
 			resetAnimation: function(level, speed){//speed level and speed interval
 				var $fan = this.$self;
@@ -298,12 +365,14 @@
 						"155", "165", "175", "200", "225", "250", "275", "300", "325", "350"];
 					
 						$front[0].style['webkitAnimationDuration'] = speedindex[speed/10-1]+"ms"; 
+						$front[0].style['mozAnimationDuration'] = speedindex[speed/10-1]+"ms"; 
 					}
 				}else{
 					//console.log("Normal", level, speed)
 					$("#front.highspeed").each(function(i){
 						$(this).removeClass("highspeed");
 						this.style['webkitAnimationDuration'] = "";
+						this.style['mozAnimationDuration'] = "";
 					});
 				}
 			},
@@ -453,8 +522,8 @@
 		<p>Click on the power-cord/plug to turn on the fan</p>
 	</aside>
 	<aside id="note">
-		<h2>Note</h2>
-		<p>This demo doesn't support IE/Opera/FF, or older version of safari/chrome</p>
+		<h2>Browser</h2>
+		<p>FF5+/Safari 5+/Chrome 11+</p>
 	</aside>
 	<aside id="credit">
 		<h2>Credit</h2>
