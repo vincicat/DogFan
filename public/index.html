@@ -379,7 +379,6 @@
 			powerOn: function(){
 				var $fan = this.$self;
 				$fan.addClass("on connected");
-				Dogfan_Ah.init();
 				window.setTimeout(function(){
 					$("#ahahah")[0].play();
 				}, 1500); /* 3 cycle */
@@ -399,6 +398,7 @@
 			},
 			init:function(){			
 				this.$self = $("#dogfan");	
+				Dogfan_Ah.init();
 				$("#plug, #power").click(function(e){
 					e.stopPropagation();
 					Dogfan.powerToggle();
