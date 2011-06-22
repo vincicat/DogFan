@@ -398,7 +398,7 @@
 			},
 			init:function(){			
 				this.$self = $("#dogfan");	
-				Dogfan_Ah.init();
+				$(window).load(function(){ Dogfan_Ah.init(); });
 				$("#plug, #power").click(function(e){
 					e.stopPropagation();
 					Dogfan.powerToggle();
