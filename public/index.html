@@ -433,6 +433,9 @@
 			force_loop: function(e){
 				this.currentTime = 0;
 			},
+			ios_loop:function(e){
+				this.play();
+			},
 			loop: function(control){
 				var $ah = $("#ahahah");
 				
@@ -455,7 +458,7 @@
 					switch(this.loop_mode){ 
 						case this.LP.PLAY:
 							//console.log("play()");
-							$ah[0].onended="this.load();this.play();" ;
+							$ah[0].onended= Dogfan_Ah.ios_loop;
 						break;
 						case this.LP.FUNC:
 							//console.log("callback function");
