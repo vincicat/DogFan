@@ -438,7 +438,7 @@
 				this.currentTime = 0;
 			},
 			ios_loop:function(e){
-				console.log(this);
+				this.load();
 				this.play();
 			},
 			loop: function(control){
@@ -598,8 +598,6 @@
 	<audio preload="auto" id="ahahah">
 		<source src="media/ahahah.mp3" type="audio/mpeg">
 		<source src="media/ahahah.wav">
-	</audio>
-	<audio id="ahahah_ios" onended="this.load();this.play()" src="media/ahahah.mp3" type="audio/mpeg" controls>
 	</audio>
 </section>
 </body>
