@@ -447,7 +447,7 @@
 				if($ah.attr("data-loop")){
 					switch(this.loop_mode){ 
 						case this.LP.PLAY:
-							$ah[0].onended="" ;
+							$ah[0].removeEventListener('ended',Dogfan_Ah.ios_loop,false);
 						break;
 						case this.LP.FUNC:
 							$ah[0].removeEventListener('ended', Dogfan_Ah.force_loop , false);
@@ -463,7 +463,7 @@
 					switch(this.loop_mode){ 
 						case this.LP.PLAY:
 							//console.log("play()");
-							$ah[0].onended= Dogfan_Ah.ios_loop;
+							$ah[0].addEventListener('ended',Dogfan_Ah.ios_loop,false);
 						break;
 						case this.LP.FUNC:
 							//console.log("callback function");
