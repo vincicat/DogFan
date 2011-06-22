@@ -379,6 +379,9 @@
 			powerOn: function(){
 				var $fan = this.$self;
 				$fan.addClass("on connected");
+				if(navigator.platform === "iPhone" || navigator.platform == "iPad"){
+					$("#ahahah")[0].load(); 
+				}
 				window.setTimeout(function(){
 					$("#ahahah")[0].play();
 				}, 1500); /* 3 cycle */
@@ -424,7 +427,7 @@
 					var ah = $("#ahahah")[0];
 					if(!ah){ console.warn("Audio is not ready");}
 					ah.controls = true;
-					ah.load(); /* Reference http://flowz.com/2011/03/apple-disabled-audiovideo-playback-in-html5/ */
+					/* Reference http://flowz.com/2011/03/apple-disabled-audiovideo-playback-in-html5/ */
 				}else if(/[^.]+$/.exec($("#ahahah")[0].currentSrc) == "wav"){ //firefox
 					this.loop_mode = this.LP.FUNC;
 				}else{ //other nice modern browser
