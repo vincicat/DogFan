@@ -423,7 +423,7 @@
 					this.loop_mode = this.LP.PLAY;
 					var ah = $("#ahahah")[0];
 					ah.controls = true;
-					ah.load(); 
+					ah.load(); //Reference http://flowz.com/2011/03/apple-disabled-audiovideo-playback-in-html5/ 
 				}else if(/[^.]+$/.exec($("#ahahah")[0].currentSrc) == "wav"){ //firefox
 					this.loop_mode = this.LP.FUNC;
 				}else{ //other nice modern browser
@@ -435,7 +435,7 @@
 			},
 			loop: function(control){
 				var $ah = $("#ahahah");
-				console.log(this, this.loop_mode);
+				
 				if($ah.attr("data-loop")){
 					switch(this.loop_mode){ 
 						case this.LP.PLAY:
@@ -454,24 +454,26 @@
 				}else{
 					switch(this.loop_mode){ 
 						case this.LP.PLAY:
-							console.log("play()");
+							//console.log("play()");
 							$ah[0].onended="this.play();" ;
 						break;
 						case this.LP.FUNC:
-							console.log("callback function");
+							//console.log("callback function");
 							$ah[0].addEventListener('ended', Dogfan_Ah.force_loop , false);
 						break;
 						case this.LP.ATTR:
 						default:
-							console.log("attr()");
+							//console.log("attr()");
 							$ah.attr("loop",true);
 						break;
 					}
 					$ah.attr("data-loop", true);
 					if($("#dogfan.on").size() > 0){
-						console.log("Loop play");
+						//console.log("Loop play");
 						if(this.loop_mode !== this.LP.PLAY){
 							$ah[0].currentTime = 0; // this should be not needed, but chrome need pointer reset...		
+						}else{
+							$ah[0].load();
 						}
 						$ah[0].play();
 					}
